@@ -34,3 +34,11 @@ class App:
     def render(self):
         self.load_all()
         self.screen.blit(self.map_picture, CONST.MAP_POS)
+
+    def change_scale(self, button_number):
+        # PgUp = 4 and PgDown = 5
+        if button_number == 4 and self.scale < 18:
+            self.scale += 1
+        if button_number == 5 and self.scale > 0:
+            self.scale -= 1
+        self.map_bytes = self.get_map_bytes(self.get_params_for_map())

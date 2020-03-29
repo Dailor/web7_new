@@ -12,6 +12,6 @@ GEOSEARCH_KEY = "40d1649f-0493-4b70-98ba-98533de7710b"
 
 START_PLACE = "проспект Aль-Фараби 77/8, Алматы"
 START_POS = point_by_addr.get_pos(START_PLACE)
-START_SCALE = 8
+START_SCALE = 17
 
 NUMBER_RESULT = 10
