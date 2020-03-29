@@ -17,4 +17,4 @@ while running:
     for event in pygame.event.get():
         if (event.type == pygame.QUIT):
             terminate()
-app.render()
+    app.render()
