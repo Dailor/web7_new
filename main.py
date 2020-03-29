@@ -1,13 +1,12 @@
 import pygame
 import sys
 from modules import CONST
-from modules import App
+from modules.App import App
 
 
 def terminate():
     pygame.quit()
     sys.exit()
-
 
 
 pygame.init()
@@ -18,4 +17,4 @@ while running:
     for event in pygame.event.get():
         if (event.type == pygame.QUIT):
             terminate()
-    app.render()
+app.render()
