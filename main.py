@@ -1,6 +1,7 @@
 import pygame
 import sys
 from modules import CONST
+from modules import App
 
 
 def terminate():
@@ -8,10 +9,13 @@ def terminate():
     sys.exit()
 
 
+
 pygame.init()
 screen = pygame.display.set_mode(CONST.SIZE)
+app = App(screen)
 running = True
 while running:
     for event in pygame.event.get():
         if (event.type == pygame.QUIT):
             terminate()
+    app.render()
