@@ -20,14 +20,20 @@ while running:
             terminate()
         elif event.type == pygame.MOUSEBUTTONDOWN:
             # MousePgUp = 4 and MousePgDown = 5
-            if event.button == 4 or event.button == 5:
-                app.change_scale(event.button)
+            if event.button == 4:
+                app.change_scale(CONST.UP_SCALE)
+            elif event.button == 5:
+                app.change_scale(CONST.DOWN_SCALE)
+
+
         elif event.type == pygame.KEYDOWN:
-            # Keyboard PgUp = 4 and PgDown = 5
+            # Keyboard PgUp and PgDown
             if event.key == pygame.K_PAGEDOWN:
-                app.change_scale(4)
+                app.change_scale(CONST.DOWN_SCALE)
             elif event.key == pygame.K_PAGEUP:
-                app.change_scale(5)
+                app.change_scale(CONST.UP_SCALE)
+
+
     screen.fill((0, 0, 0))
     app.render()
     pygame.display.flip()
