@@ -33,6 +33,15 @@ while running:
             elif event.key == pygame.K_PAGEUP:
                 app.change_scale(CONST.UP_SCALE)
 
+            #Перемещение по карте
+            elif event.key == pygame.K_UP:
+                app.change_coords(CONST.MOVE_UP)
+            elif event.key == pygame.K_DOWN:
+                app.change_coords(CONST.MOVE_DOWN)
+            elif event.key == pygame.K_LEFT:
+                app.change_coords(CONST.MOVE_LEFT)
+            elif event.key == pygame.K_RIGHT:
+                app.change_coords(CONST.MOVE_RIGHT)
 
     screen.fill((0, 0, 0))
     app.render()
