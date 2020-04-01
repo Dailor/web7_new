@@ -46,7 +46,8 @@ class App:
             btn = RadioButton(self.map_type_group, (pos_x, CONST.GROUP_TYPE_MAP_POS[1]), btn_text,
                               font_size=CONST.MAP_TYPES_FONT)
             btn.map_type = map_type
-            pos_x += btn.get_width()
+        self.map_type_group.set_equal_width()
+        self.map_type_group.set_in_row()
 
     def get_params_for_map(self) -> dict:
         return {'l': self.map_type,
@@ -77,10 +78,12 @@ class App:
         self.radio_groups_checker()
         self.screen.blit(self.map_picture, CONST.MAP_POS)
         self.map_type_group.draw(self.screen)
+
         pygame.draw.rect(self.screen, CONST.EDIT_FIND_BG_COLOR, (*CONST.EDIT_FIND_POS, *CONST.EDIT_FIND_SIZE))
-        pygame.draw.rect(self.screen, CONST.EDIT_FIND_FONT_COLOR, (*CONST.EDIT_FIND_POS, *CONST.EDIT_FIND_SIZE), 3)
+        pygame.draw.rect(self.screen, CONST.EDIT_FIND_FONT_COLOR, (*CONST.EDIT_FIND_POS, *CONST.EDIT_FIND_SIZE), 1)
 
         pygame.draw.rect(self.screen, CONST.BTN_SEARCH_BG_COLOR, (*CONST.BTN_SEARCH_POS, *CONST.BTN_SEARCH_SIZE))
+        pygame.draw.rect(self.screen, CONST.BTN_SEARCH_FONT_COLOR, (*CONST.BTN_SEARCH_POS, *CONST.BTN_SEARCH_SIZE), 1)
 
     @setPicture
     def change_map_type(self, value):

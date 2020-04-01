@@ -14,7 +14,7 @@ def negativ_color(rgb):
 
 
 class ButtonBase(pygame.sprite.Sprite):
-    def __init__(self, group, pos, text, margin_top_bottom=10, margin_left_right=10, font_size=None,
+    def __init__(self, group, pos, text, padding_top_bottom=10, padding_left_right=10, font_size=None,
                  background_color=None, text_color=None):
         super().__init__(group)
 
@@ -36,26 +36,25 @@ class ButtonBase(pygame.sprite.Sprite):
         else:
             self.text_color = text_color
 
-        self.margin_top_bottom = margin_top_bottom
-        self.margin_left_right = margin_left_right
+        self.padding_top_bottom = padding_top_bottom
+        self.padding_left_right = padding_left_right
 
         self.border_width = self.font_size // 8
 
         self.apply_settings()
 
     def apply_settings(self):
-        font = pygame.font.Font(None, self.font_size)
-        text = font.render(self.text, True, self.text_color)
+        text = self.get_text_pygame()
 
         text_w = text.get_width()
         text_h = text.get_height()
 
-        box_w = text_w + 2 * self.margin_left_right
-        box_h = text_h + 2 * self.margin_top_bottom
+        box_w = text_w + 2 * self.padding_left_right
+        box_h = text_h + 2 * self.padding_top_bottom
 
         self.image = pygame.Surface((box_w, box_h), pygame.SRCALPHA, 32)
         self.image.fill(self.background_color)
-        self.image.blit(text, (box_w - text_w - self.margin_left_right, box_h - text_h - self.margin_top_bottom))
+        self.image.blit(text, (box_w - text_w - self.padding_left_right, box_h - text_h - self.padding_top_bottom))
         pygame.draw.rect(self.image, self.text_color, (0, 0, box_w, box_h), self.border_width)
 
         self.rect = self.image.get_rect()
@@ -65,11 +64,31 @@ class ButtonBase(pygame.sprite.Sprite):
         if isinstance(group, need) is False:
             raise Exception("Класс не соответсвует группе")
 
+    def get_pos(self):
+        return self.rect.x, self.rect.y
+
+    def get_pos_x(self):
+        return self.rect.x
+
+    def get_pos_y(self):
+        return self.rect.y
+
     def get_width(self):
         return self.rect.w
 
     def get_height(self):
         return self.rect.h
+
+    def get_text_pygame(self):
+        font = pygame.font.Font(None, self.font_size)
+        text = font.render(self.text, True, self.text_color)
+        return text
+
+    def get_text_width(self):
+        return self.get_text_pygame().get_width()
+
+    def get_text_height(self):
+        return self.get_text_pygame().get_height()
 
     @ApplySettings
     def set_border_width(self, width):
@@ -96,12 +115,12 @@ class ButtonBase(pygame.sprite.Sprite):
         self.text_color = color
 
     @ApplySettings
-    def set_margin_left_right(self, margin):
-        self.margin_left_right = margin
+    def set_padding_left_right(self, margin):
+        self.padding_left_right = margin
 
     @ApplySettings
-    def set_margin_top_bottom(self, margin):
-        self.margin_top_bottom = margin
+    def set_padding_top_bottom(self, margin):
+        self.padding_top_bottom = margin
 
     def draw_border(self, color):
         pygame.draw.rect(self.image, color, (0, 0, self.rect.w, self.rect.h),
@@ -184,6 +203,19 @@ class ButtonsGroup(pygame.sprite.Group):
     def check_release(self):
         for btn in self.sprites():
             btn.make_deactive()
+
+    def set_equal_width(self):
+        max_width = max(map(lambda x: x.get_width(), self.sprites()))
+        for btn in self.sprites():
+            width_text = btn.get_text_width()
+            padding_left_right = (max_width - width_text) // 2
+            btn.set_padding_left_right(padding_left_right)
+
+    def set_in_row(self):
+        pos = [*self.sprites()[0].get_pos()]
+        for btn in self.sprites():
+            btn.set_pos(pos)
+            pos[0] += btn.get_width()
 
 
 class RadioButtonsGroup(ButtonsGroup):
