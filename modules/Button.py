@@ -108,6 +108,14 @@ class DefaultButton(ButtonBase):
         self.check_buttons_group(group, ButtonsGroup)
         super().__init__(group, *args, **kwargs)
         self.pressed = False
+        self.on_press_func = None
+        self.on_press_func_args = None
+        self.on_press_func_kwargs = None
+
+    def set_on_press_func(self, func, *args, **kwargs):
+        self.on_press_func = func
+        self.on_press_func_args = args
+        self.on_press_func_kwargs = kwargs
 
     def make_active(self, pos):
         self.pressed = super().make_active(pos)
@@ -120,7 +128,9 @@ class DefaultButton(ButtonBase):
             self.pressed = False
 
     def on_press(self):
-        raise Exception("Реализуй метод :)")
+        if self.on_press_func is None:
+            raise Exception("Реализуй метод :)")
+        return self.on_press_func(*self.on_press_func_args, **self.on_press_func_kwargs)
 
 
 class RadioButton(ButtonBase):
@@ -214,7 +224,7 @@ def test_how_work():
     btn_group_def = ButtonsGroup()
 
     btn_def = DefaultButton(btn_group_def, (250, 50 * 5), "Print ", font_size=50)
-    btn_def.on_press = test_func
+    btn_def.set_on_press_func(test_func)
 
     btn1_1 = RadioButton(btn_group_1, (50, 50), "group_1_1", font_size=50)
     btn1_2 = RadioButton(btn_group_1, (50, 50 * 3), "group_1_2", font_size=50)
@@ -240,3 +250,7 @@ def test_how_work():
         all_btns_groups.draw(screen)
 
         pygame.display.flip()
+
+
+if __name__ == "__main__":
+    test_how_work()
