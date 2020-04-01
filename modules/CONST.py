@@ -1,9 +1,35 @@
 import point_by_addr
 
-SIZE = 800, 600
+# (In Pycharm) CTRL + SHIFT + A, THEN TYPE "show color picker" without quotes and press ENTER
+BG_COLOR = (220, 220, 220)
+SIZE = 650, 750
+
+BTN_SEARCH_SIZE = 75, 40
+EDIT_FIND_SIZE = SIZE[0] - BTN_SEARCH_SIZE[0], BTN_SEARCH_SIZE[1]
+
+BTN_SEARCH_POS = EDIT_FIND_SIZE[0], 1
+EDIT_FIND_POS = 0, BTN_SEARCH_POS[1]
+
+EDIT_FIND_BG_COLOR = (255, 255, 255)
+EDIT_FIND_FONT_COLOR = (36, 36, 36)
+
+BTN_SEARCH_BG_COLOR = (250, 225, 97)
+BTN_SEARCH_FONT_COLOR = (36, 36, 36)
+
+MAP_TYPES = [('map', 'Схема'), ('sat', 'Спутник'), ('sat,skl', "Гибрид")]
+MAX_LEN_NAME = max(map(lambda x: len(x[1]), MAP_TYPES))
+for i in range(len(MAP_TYPES)):
+    need_space = MAX_LEN_NAME - len(MAP_TYPES[i][1])
+    left = need_space // 2
+    right = need_space // 2 + need_space % 2
+    MAP_TYPES[i] = MAP_TYPES[i][0], MAP_TYPES[i][1].ljust(left, ' ').rjust(right, ' ')
+
+MAP_TYPES_FONT = 20
+GROUP_TYPE_MAP_POS = 0, EDIT_FIND_POS[1] + EDIT_FIND_SIZE[1]
+
 SIZE_API = 650, 450
-MAP_SIZE = SIZE
-MAP_POS = 0, 0
+MAP_SIZE = 650, 450
+MAP_POS = 0, SIZE[1] - MAP_SIZE[1]
 
 API_SEARCH_MAP = "https://search-maps.yandex.ru/v1/"
 API_STATIC_MAP = "https://static-maps.yandex.ru/1.x/"

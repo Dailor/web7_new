@@ -2,6 +2,7 @@ import requests
 import CONST
 import pygame
 import io
+from Button import RadioButtonsGroup, RadioButton
 from point_by_addr import get_pos
 
 
@@ -20,8 +21,17 @@ class ApiException(Exception):
 
 
 class App:
-    def __init__(self, screen):
+    def __init__(self, screen, group_of_groups: dict):
+        self.map_type = CONST.MAP_TYPES[0][0]
+
         self.screen = screen
+
+        self.map_type_group = RadioButtonsGroup()
+
+        self.btn_groups_of_groups = group_of_groups["btn"]
+        self.btn_groups_of_groups.add(self.map_type_group)
+
+        self.ui_init()
 
         self.zoom = CONST.START_ZOOM
         self.position = CONST.START_POS
@@ -29,8 +39,17 @@ class App:
         map_bytes = self.get_map_bytes(self.get_params_for_map())
         self.map_picture = self.bytes_to_pygame_img(map_bytes)
 
+    def ui_init(self):
+        pos_x = CONST.GROUP_TYPE_MAP_POS[0]
+        for i in range(len(CONST.MAP_TYPES)):
+            map_type, btn_text = CONST.MAP_TYPES[i]
+            btn = RadioButton(self.map_type_group, (pos_x, CONST.GROUP_TYPE_MAP_POS[1]), btn_text,
+                              font_size=CONST.MAP_TYPES_FONT)
+            btn.map_type = map_type
+            pos_x += btn.get_width()
+
     def get_params_for_map(self) -> dict:
-        return {'l': 'map',
+        return {'l': self.map_type,
                 "ll": ','.join(str(i) for i in self.position),
                 "z": self.zoom,
                 "size": ','.join(str(i) for i in CONST.SIZE_API)}
@@ -49,8 +68,23 @@ class App:
             msg = r.text.split('<message>')[1].split('</message>')[0]
             raise ApiException(msg)
 
+    def radio_groups_checker(self):
+        value = self.map_type_group.get_selected().map_type
+        if value != self.map_type:
+            self.change_map_type(value)
+
     def render(self):
+        self.radio_groups_checker()
         self.screen.blit(self.map_picture, CONST.MAP_POS)
+        self.map_type_group.draw(self.screen)
+        pygame.draw.rect(self.screen, CONST.EDIT_FIND_BG_COLOR, (*CONST.EDIT_FIND_POS, *CONST.EDIT_FIND_SIZE))
+        pygame.draw.rect(self.screen, CONST.EDIT_FIND_FONT_COLOR, (*CONST.EDIT_FIND_POS, *CONST.EDIT_FIND_SIZE), 3)
+
+        pygame.draw.rect(self.screen, CONST.BTN_SEARCH_BG_COLOR, (*CONST.BTN_SEARCH_POS, *CONST.BTN_SEARCH_SIZE))
+
+    @setPicture
+    def change_map_type(self, value):
+        self.map_type = value
 
     @setPicture
     def change_scale(self, action):

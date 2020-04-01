@@ -14,18 +14,32 @@ def negativ_color(rgb):
 
 
 class ButtonBase(pygame.sprite.Sprite):
-    def __init__(self, group, pos, text, margin_top_bottom=10, margin_left_right=10, font_size=20,
-                 background_color=(0, 0, 0), text_color=(52, 217, 143)):
+    def __init__(self, group, pos, text, margin_top_bottom=10, margin_left_right=10, font_size=None,
+                 background_color=None, text_color=None):
         super().__init__(group)
 
         self.pos = pos
         self.text = text
-        self.font_size = font_size
-        self.background_color = background_color
-        self.text_color = text_color
+
+        if font_size is None:
+            self.font_size = 20
+        else:
+            self.font_size = font_size
+
+        if background_color is None:
+            self.background_color = (0, 0, 0)
+        else:
+            self.background_color = background_color
+
+        if text_color is None:
+            self.text_color = (52, 217, 143)
+        else:
+            self.text_color = text_color
 
         self.margin_top_bottom = margin_top_bottom
         self.margin_left_right = margin_left_right
+
+        self.border_width = self.font_size // 8
 
         self.apply_settings()
 
@@ -51,9 +65,15 @@ class ButtonBase(pygame.sprite.Sprite):
         if isinstance(group, need) is False:
             raise Exception("Класс не соответсвует группе")
 
-    @property
-    def border_width(self):
-        return self.font_size // 8
+    def get_width(self):
+        return self.rect.w
+
+    def get_height(self):
+        return self.rect.h
+
+    @ApplySettings
+    def set_border_width(self, width):
+        self.border_width = width
 
     @ApplySettings
     def set_pos(self, pos):
